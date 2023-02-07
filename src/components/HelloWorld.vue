@@ -36,10 +36,14 @@ let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
 
 watch([latitude, longitude], ([lat, long]) => {
-  weatherService.getWeather(lat, long).then((value) => weather.update(value));
-  geoService.getLocation(lat, long).then((value) => geo.update(value));
+  Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
+    ([weatherInfo, geolocation]) => {
+      weather.update(weatherInfo);
+      geo.update(geolocation);
 
-  console.log(weather, geo);
+      console.log(weather, geo);
+    }
+  );
 });
 </script>
 
