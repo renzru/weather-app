@@ -1,0 +1,44 @@
+import { IWeatherData, IOpenWeatherData, IGeoData } from './Data';
+
+interface IExtractor {
+  extractData(body: any): IWeatherData;
+}
+
+class OpenWeatherExtractor implements IExtractor {
+  extractData(body: any): IOpenWeatherData {
+    // Destructuring
+
+    const { main: weather, description } = body.weather[0];
+    const { temp, humidity, feels_like, pressure } = body.main;
+    const { speed: wind_speed } = body.wind;
+
+    return {
+      weather,
+      description,
+      temp,
+      humidity,
+      feels_like,
+      pressure,
+      wind_speed,
+    };
+  }
+}
+
+// For Geodata
+
+interface IGeoExtractor {
+  extractData(body: any): IGeoData;
+}
+
+class GeocodingExtractor implements IGeoExtractor {
+  extractData(body: any): IGeoData {
+    const { country, name: city } = body[0];
+
+    return {
+      country,
+      city,
+    };
+  }
+}
+
+export { type IExtractor, OpenWeatherExtractor, type IGeoExtractor, GeocodingExtractor };
