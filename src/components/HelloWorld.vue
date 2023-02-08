@@ -9,13 +9,13 @@ import { GeocodingExtractor, OpenWeatherExtractor } from './lib/Extractor';
 // EXT stands for Extractor
 
 const weatherEXT = new OpenWeatherExtractor();
-const weatherAPI = new OpenWeatherAPI(weatherEXT);
-const weatherService = new WeatherService(weatherAPI);
+const weatherAPI = new OpenWeatherAPI();
+const weatherService = new WeatherService(weatherAPI, weatherEXT);
 const weather = new OpenWeather();
 
 const geoEXT = new GeocodingExtractor();
-const geoAPI = new GeocodingAPI(geoEXT);
-const geoService = new GeoService(geoAPI);
+const geoAPI = new GeocodingAPI();
+const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
 /*
@@ -35,11 +35,13 @@ Since classes here are dependent on interfaces, they are extendable and decouple
 let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
 
+// TODO: move extractor dependency from API to Service
+
 watch([latitude, longitude], ([lat, long]) => {
   Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
-    ([weatherInfo, geolocation]) => {
+    ([weatherInfo, geoLocation]) => {
       weather.update(weatherInfo);
-      geo.update(geolocation);
+      geo.update(geoLocation);
 
       console.log(weather, geo);
     }

@@ -6,12 +6,6 @@ interface IWeatherAPI {
 }
 
 class OpenWeatherAPI implements IWeatherAPI {
-  private _extractor: OpenWeatherExtractor;
-
-  constructor(extractor: OpenWeatherExtractor) {
-    this._extractor = extractor;
-  }
-
   async fetchWeather(lat: number, long: number): Promise<IOpenWeatherData> {
     const url: URL = new URL('https://api.openweathermap.org/data/2.5/weather');
     url.search = new URLSearchParams({
@@ -22,8 +16,7 @@ class OpenWeatherAPI implements IWeatherAPI {
     }).toString();
 
     const data = await (await fetch(url.toString(), { mode: 'cors' })).json();
-
-    return this._extractor.extractData(data);
+    return data;
   }
 }
 
@@ -32,12 +25,6 @@ interface IGeoAPI {
 }
 
 class GeocodingAPI implements IGeoAPI {
-  private _extractor: GeocodingExtractor;
-
-  constructor(extractor: GeocodingExtractor) {
-    this._extractor = extractor;
-  }
-
   async fetchLocation(lat: number, long: number) {
     const url: URL = new URL('http://api.openweathermap.org/geo/1.0/reverse');
     url.search = new URLSearchParams({
@@ -49,7 +36,7 @@ class GeocodingAPI implements IGeoAPI {
 
     const data = await (await fetch(url.toString(), { mode: 'cors' })).json();
 
-    return this._extractor.extractData(data);
+    return data;
   }
 }
 
