@@ -19,24 +19,9 @@ const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
 const iconService = new IconService();
-/*
-Usage for Classes and Interfaces:
-
-- Weather is used for DOM interaction with weather data, such as getting and updating values.
-- WeatherAPI is used to fetch data from a Weather API.
-- WeatherService takes a Weather API as an argument and fetches data from that API; it serves as a middleman.
-- WeatherData holds interfaces for weather data from different types of APIs.
-- WeatherExtractor is used to extract data from the JSON responses of different Weather APIs.
-
-Since classes here are dependent on interfaces, they are extendable and decoupled by nature.
-*/
-
-// TODO: turn this into a class
 
 let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
-
-// TODO: move extractor dependency from API to Service
 
 watch([latitude, longitude], ([lat, long]) => {
   Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
