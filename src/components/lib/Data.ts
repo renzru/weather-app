@@ -17,4 +17,9 @@ interface IGeoData {
   city: string;
 }
 
+interface IUserData {
+  lat: number;
+  long: number;
+}
+
 export { type IWeatherData, type IOpenWeatherData, type IGeoData };

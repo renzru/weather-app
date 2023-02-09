@@ -5,4 +5,130 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+
+  --clr-light: #c1c1c1;
+
+  /* Font sizes */
+  --fs-default: 1rem;
+  --fs-500: 1.15rem;
+  --fs-600: 1.75rem;
+  --fs-700: 1.85rem;
+  --fs-800: 2rem;
+  --fs-900: 2.5rem;
+}
+
+/* Reset */
+
+@media screen and (min-width: 40em) {
+  :root {
+    /* --fs-default: 1rem;
+    --fs-500: 1.15rem;
+    --fs-600: 1.75rem;
+    --fs-700: 1.85rem;
+    --fs-800: 2rem;
+    --fs-900: 2.5rem; */
+  }
+}
+
+/* Margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+  margin: 0;
+}
+
+/* Visuals */
+button {
+  border: none;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li {
+  padding: unset;
+  list-style-type: none;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-weight: 400;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    -webkit-animation-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    -webkit-animation-iteration-count: 1 !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility Classes */
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+body {
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+.flow>*+* {
+  margin-top: var(--flow-margin, 1rem);
+}
+
+.fs-default {
+  font-size: var(--fs-default);
+}
+
+.fs-500 {
+  font-size: var(--fs-500);
+}
+
+.fs-600 {
+  font-size: var(--fs-600);
+}
+
+.fs-800 {
+  font-size: var(--fs-800);
+}
+
+.fs-900 {
+  font-size: var(--fs-900);
+}
+
+.text-light {
+  color: var(--clr-light)
 }

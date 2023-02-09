@@ -17,12 +17,6 @@ class WeatherService {
   }
 }
 
-class IconService {
-  getIcon(id: string): string {
-    return `http://openweathermap.org/img/wn/${id}@2x.png`;
-  }
-}
-
 class GeoService {
   private _geoAPI: IGeoAPI;
   private _extractor: IGeoExtractor;
@@ -37,4 +31,25 @@ class GeoService {
   }
 }
 
-export { WeatherService, GeoService, IconService };
+class IconService {
+  getIcon(id: string): string {
+    return `http://openweathermap.org/img/wn/${id}@2x.png`;
+  }
+}
+
+class UserGeoService {
+  getUserGeo() {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve([position.coords.latitude, position.coords.longitude]);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+}
+
+export { WeatherService, GeoService, IconService, UserGeoService };
