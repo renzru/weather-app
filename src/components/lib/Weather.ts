@@ -7,6 +7,7 @@ interface Weather {
 
 class OpenWeather implements Weather {
   private _data: IOpenWeatherData = {
+    icon: '',
     weather: '',
     description: '',
     temp: 0,

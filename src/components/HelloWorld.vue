@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Ref, ref, watch } from 'vue';
+import { Ref, ref, VueElement, watch } from 'vue';
 import { OpenWeather } from './lib/Weather';
 import { OpenWeatherGeo } from './lib/Geo';
 import { GeocodingAPI, OpenWeatherAPI } from './lib/API';
-import { GeoService, WeatherService } from './lib/Service';
+import { GeoService, IconService, WeatherService } from './lib/Service';
 import { GeocodingExtractor, OpenWeatherExtractor } from './lib/Extractor';
 
 // EXT stands for Extractor
@@ -18,6 +18,7 @@ const geoAPI = new GeocodingAPI();
 const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
+const iconService = new IconService();
 /*
 Usage for Classes and Interfaces:
 
@@ -42,14 +43,13 @@ watch([latitude, longitude], ([lat, long]) => {
     ([weatherInfo, geoLocation]) => {
       weather.update(weatherInfo);
       geo.update(geoLocation);
-
-      console.log(weather, geo);
     }
   );
 });
 </script>
 
 <template>
+  <img v-bind:src="iconService.getIcon(weather.get('icon'))" />
   <input v-model="latitude" max="90" type="number" />
   <input v-model="longitude" max="180" type="number" />
   <h1>{{ geo.get('country') || 'Country' }}</h1>

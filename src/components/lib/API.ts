@@ -35,7 +35,6 @@ class GeocodingAPI implements IGeoAPI {
     }).toString();
 
     const data = await (await fetch(url.toString(), { mode: 'cors' })).json();
-
     return data;
   }
 }

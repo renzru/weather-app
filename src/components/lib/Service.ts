@@ -17,6 +17,12 @@ class WeatherService {
   }
 }
 
+class IconService {
+  getIcon(id: string): string {
+    return `http://openweathermap.org/img/wn/${id}@2x.png`;
+  }
+}
+
 class GeoService {
   private _geoAPI: IGeoAPI;
   private _extractor: IGeoExtractor;
@@ -31,4 +37,4 @@ class GeoService {
   }
 }
 
-export { WeatherService, GeoService };
+export { WeatherService, GeoService, IconService };

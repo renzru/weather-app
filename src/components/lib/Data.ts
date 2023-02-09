@@ -5,6 +5,7 @@ interface IWeatherData {
 }
 
 interface IOpenWeatherData extends IWeatherData {
+  icon?: string;
   humidity?: number;
   feels_like?: number;
   pressure?: number;
