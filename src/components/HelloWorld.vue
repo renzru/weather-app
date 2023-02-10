@@ -6,18 +6,19 @@ import { GeocodingAPI, OpenWeatherAPI } from './lib/API';
 import { GeoService, IconService, WeatherService, UserGeoService } from './lib/Service';
 import { GeocodingExtractor, OpenWeatherExtractor } from './lib/Extractor';
 
-// EXT stands for Extractor
-
+// Weather
 const weatherEXT = new OpenWeatherExtractor();
 const weatherAPI = new OpenWeatherAPI();
 const weatherService = new WeatherService(weatherAPI, weatherEXT);
 const weather = new OpenWeather();
 
+// Geo
 const geoEXT = new GeocodingExtractor();
 const geoAPI = new GeocodingAPI();
 const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
+//  Misc.
 const iconService = new IconService();
 const userGeoService = new UserGeoService();
 
@@ -46,20 +47,82 @@ function updateData(lat: number, long: number): void {
 watch([latitude, longitude], ([lat, long]) => {
   updateData(lat, long);
 });
+
+// TODO: Add state in geo data to display country, state in page if available
 </script>
 
 <template>
-  <main class="grid">
-    <input v-model="latitude" max="90" type="number" />
-    <input v-model="longitude" max="180" type="number" />
-    <div v-if="loaded">
-      <img v-bind:src="iconService.getIcon(weather.get('icon'))" />
-      <h1>{{ weather.get('temp') }}°</h1>
-      <h2 class="fs-900">{{ geo.get('city') }}</h2>
-      <p class="fs-default text-light">Experiencing {{ weather.get('description') }} right now.</p>
+  <input v-model="latitude" max="90" type="number" />
+  <input v-model="longitude" max="180" type="number" />
+  <main class="grid" v-if="loaded">
+    <div class="weather flow">
+      <section class="weather-main grid">
+        <div class="grid">
+          <img class="weather-icon" v-bind:src="iconService.getIcon(weather.get('icon'))" />
+          <h1 class="fs-normal align-start text-light-1">{{ geo.get('country') }}</h1>
+          <h1 class="fs-700 text-black">
+            {{ geo.get('city') }}
+            <span class="bold">{{ weather.get('feels_like') }}°</span>
+          </h1>
+          <p class="fs-normal body text-light-1">
+            Experiencing {{ weather.get('description') }} right now.
+          </p>
+        </div>
+      </section>
+      <section class="weather-extra flex">
+        <article class="grid">
+          <h1 class="fs-normal text-light-2">Feels like</h1>
+          <p class="bold fs-700">{{ weather.get('feels_like') }}°</p>
+        </article>
+        <hr />
+        <article class="grid">
+          <h1 class="fs-normal text-light-2">Humidity</h1>
+          <p class="bold fs-700">{{ weather.get('humidity') }}%</p>
+        </article>
+        <hr />
+        <article class="grid">
+          <h1 class="fs-normal text-light-2">Wind</h1>
+          <p class="bold fs-700">{{ weather.get('wind_speed') }}m/s</p>
+        </article>
+        <hr />
+        <article class="grid">
+          <h1 class="fs-normal text-light-2">Pressure</h1>
+          <p class="bold fs-700">{{ weather.get('humidity') }} hPa</p>
+        </article>
+      </section>
     </div>
-    <div v-else="!loaded">Loading...</div>
   </main>
+  <div v-else="!loaded">Loading...</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  grid-template-areas: '. content .';
+  grid-template-columns: minmax(2rem, 1fr) 40rem minmax(2rem, 1fr);
+}
+
+.weather {
+  --flow-margin: 2.5rem;
+  grid-area: content;
+}
+
+.weather-main {
+  place-items: center;
+}
+
+.weather-icon {
+  place-self: center;
+}
+
+.weather-extra {
+  justify-content: center;
+  padding: 2rem 3rem;
+  border-radius: 1.5rem;
+  background-color: #efeef6;
+}
+
+.body {
+  font-weight: normal;
+  font-family: 'Source Sans Pro';
+}
+</style>

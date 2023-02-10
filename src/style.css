@@ -1,4 +1,5 @@
 :root {
+  font-family: 'Montserrat', 'sans-serif';
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -6,16 +7,20 @@
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 
-  --clr-light: #c1c1c1;
+  --clr-light-1: #c2c0c9;
+  --clr-light-2: #706f7b;
+  --clr-black: #010313;
+  --hover-1: #5d91aa;
 
   /* Font sizes */
-  --fs-default: 1rem;
+  --fs-normal: 1rem;
   --fs-500: 1.15rem;
   --fs-600: 1.75rem;
   --fs-700: 1.85rem;
   --fs-800: 2rem;
   --fs-900: 2.5rem;
 }
+
 
 /* Reset */
 
@@ -103,14 +108,15 @@ p {
 body {
   height: 100vh;
   overflow-x: hidden;
+  color: var(--clr-black);
 }
 
 .flow>*+* {
   margin-top: var(--flow-margin, 1rem);
 }
 
-.fs-default {
-  font-size: var(--fs-default);
+.fs-normal {
+  font-size: var(--fs-normal);
 }
 
 .fs-500 {
@@ -121,6 +127,10 @@ body {
   font-size: var(--fs-600);
 }
 
+.fs-700 {
+  font-size: var(--fs-700);
+}
+
 .fs-800 {
   font-size: var(--fs-800);
 }
@@ -129,6 +139,27 @@ body {
   font-size: var(--fs-900);
 }
 
-.text-light {
-  color: var(--clr-light)
+.bold {
+  font-weight: bold;
+}
+
+.light {
+  font-weight: lighter;
+}
+
+
+.text-light-1 {
+  color: var(--clr-light-1)
+}
+
+.text-light-2 {
+  color: var(--clr-light-2);
+}
+
+.text-black {
+  color: var(--clr-black)
+}
+
+.align-start {
+  place-self: start;
 }
