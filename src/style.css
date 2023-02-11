@@ -163,3 +163,7 @@ body {
 .align-start {
   place-self: start;
 }
+
+.align-center {
+  place-self: center;
+}

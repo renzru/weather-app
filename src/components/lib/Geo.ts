@@ -8,6 +8,7 @@ interface Geo {
 class OpenWeatherGeo implements Geo {
   private _data: IGeoData = {
     country: '',
+    state: undefined,
     city: '',
   };
 

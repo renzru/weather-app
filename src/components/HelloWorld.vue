@@ -48,7 +48,7 @@ watch([latitude, longitude], ([lat, long]) => {
   updateData(lat, long);
 });
 
-// TODO: Add state in geo data to display country, state in page if available
+// TODO: Add modal that displays complete weather data
 </script>
 
 <template>
@@ -58,14 +58,19 @@ watch([latitude, longitude], ([lat, long]) => {
     <div class="weather flow">
       <section class="weather-main grid">
         <div class="grid">
-          <img class="weather-icon" v-bind:src="iconService.getIcon(weather.get('icon'))" />
-          <h1 class="fs-normal align-start text-light-1">{{ geo.get('country') }}</h1>
+          <img
+            class="weather-icon align-center"
+            v-bind:src="iconService.getIcon(weather.get('icon'))" />
+          <h1 v-if="geo.get('country')" class="fs-normal align-start text-light-1">
+            {{ geo.get('country') }}{{ geo.get('state') ? ',' : '' }} {{ geo.get('state') || '' }}
+          </h1>
+          <h1 v-else class="fs-normal align-start text-light-1">Location unavailable...</h1>
           <h1 class="fs-700 text-black">
             {{ geo.get('city') }}
             <span class="bold">{{ weather.get('feels_like') }}°</span>
           </h1>
-          <p class="fs-normal body text-light-1">
-            Experiencing {{ weather.get('description') }} right now.
+          <p class="fs-normal body text-light-1 align-center">
+            Experiencing {{ weather.get('description') }}.
           </p>
         </div>
       </section>
@@ -108,10 +113,6 @@ main {
 
 .weather-main {
   place-items: center;
-}
-
-.weather-icon {
-  place-self: center;
 }
 
 .weather-extra {

@@ -32,10 +32,15 @@ interface IGeoExtractor {
 
 class GeocodingExtractor implements IGeoExtractor {
   extractData(body: any): IGeoData {
-    const { country, name: city } = body[0];
+    if (!body.length) {
+      return {};
+    }
+
+    const { country, state, name: city } = body[0];
 
     return {
       country,
+      state,
       city,
     };
   }

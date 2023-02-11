@@ -12,9 +12,11 @@ interface IOpenWeatherData extends IWeatherData {
   wind_speed?: number;
 }
 
+// Optional because sometimes Geo Data is unavailable
 interface IGeoData {
-  country: string;
-  city: string;
+  country?: string;
+  state?: string;
+  city?: string;
 }
 
 interface IUserData {
