@@ -1,44 +1,53 @@
 <script setup lang="ts">
 import { Ref, ref, VueElement, onBeforeMount, watch } from 'vue';
+import { IWeatherData } from './lib/Data';
 import { OpenWeather } from './lib/Weather';
 import { OpenWeatherGeo } from './lib/Geo';
 import { GeocodingAPI, OpenWeatherAPI } from './lib/API';
 import { GeoService, IconService, WeatherService, UserGeoService } from './lib/Service';
 import { GeocodingExtractor, OpenWeatherExtractor } from './lib/Extractor';
+import DetailsModal from './DetailsModal.vue';
 
-// Weather
 const weatherEXT = new OpenWeatherExtractor();
 const weatherAPI = new OpenWeatherAPI();
 const weatherService = new WeatherService(weatherAPI, weatherEXT);
 const weather = new OpenWeather();
 
-// Geo
 const geoEXT = new GeocodingExtractor();
 const geoAPI = new GeocodingAPI();
 const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
-//  Misc.
 const iconService = new IconService();
 const userGeoService = new UserGeoService();
 
 let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
 let loaded: Ref<boolean> = ref(false);
+let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
 onBeforeMount(() => {
   userGeoService
     .getUserGeo()
-    .then(([lat, long]: [number, number]) => updateData(lat, long))
+    .then(([lat, long]: [number, number]) => {
+      latitude.value = lat;
+      longitude.value = long;
+      updateData(lat, long);
+    })
     .catch(() => console.log('Error!'));
 });
 
 function updateData(lat: number, long: number): void {
   loaded.value = false;
-  Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
-    ([weatherInfo, geoLocation]) => {
-      weather.update(weatherInfo);
-      geo.update(geoLocation);
+  Promise.all([weatherAPI.fetchWeather(lat, long), geoService.getLocation(lat, long)]).then(
+    ([weatherData, geoData]) => {
+      /* 
+      WeatherAPI is being used directly instead of the service because the entire response is required.
+      */
+      weather.update(weatherEXT.extractData(weatherData));
+      weatherDetails.value = weatherData;
+
+      geo.update(geoData);
       loaded.value = true;
     }
   );
@@ -56,6 +65,7 @@ watch([latitude, longitude], ([lat, long]) => {
   <input v-model="longitude" max="180" type="number" />
   <main class="grid" v-if="loaded">
     <div class="weather flow">
+      <!-- Main Weather Data -->
       <section class="weather-main grid">
         <div class="grid">
           <img
@@ -67,14 +77,17 @@ watch([latitude, longitude], ([lat, long]) => {
           <h1 v-else class="fs-normal align-start text-light-1">Location unavailable...</h1>
           <h1 class="fs-700 text-black">
             {{ geo.get('city') }}
-            <span class="bold">{{ weather.get('feels_like') }}°</span>
+            <span class="bold">{{ weather.get('temp') }}°</span>
           </h1>
           <p class="fs-normal body text-light-1 align-center">
             Experiencing {{ weather.get('description') }}.
           </p>
         </div>
       </section>
+      <!-- Additional Weather Data -->
       <section class="weather-extra flex">
+        <button class="details-btn">i</button>
+
         <article class="grid">
           <h1 class="fs-normal text-light-2">Feels like</h1>
           <p class="bold fs-700">{{ weather.get('feels_like') }}°</p>
@@ -97,7 +110,10 @@ watch([latitude, longitude], ([lat, long]) => {
       </section>
     </div>
   </main>
+  <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
+  <!-- Details Modal -->
+  <DetailsModal v-if="loaded" :details="weatherDetails" />
 </template>
 
 <style scoped>
@@ -115,10 +131,21 @@ main {
   place-items: center;
 }
 
+.details-btn {
+  position: absolute;
+  aspect-ratio: 1;
+  right: 0.55rem;
+  top: 0.55rem;
+  padding: 0.55rem;
+  line-height: 0;
+  background-color: #d4d2df;
+  border-radius: 100%;
+}
 .weather-extra {
+  position: relative;
   justify-content: center;
   padding: 2rem 3rem;
-  border-radius: 1.5rem;
+  border-radius: 0.85rem;
   background-color: #efeef6;
 }
 
