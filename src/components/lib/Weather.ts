@@ -1,4 +1,4 @@
-import { IWeatherData, IOpenWeatherData, IOpenWeatherDataComplete } from './Data';
+import { IWeatherData, IOpenWeatherData } from './Data';
 
 interface Weather {
   update(data: IWeatherData): void;
@@ -9,12 +9,20 @@ class OpenWeather implements Weather {
   private _data: IOpenWeatherData = {
     icon: '',
     weather: '',
-    description: '',
     temp: 0,
-    humidity: 0,
+    description: '',
     feels_like: 0,
+    temp_min: 0,
+    temp_max: 0,
+    visibility: 0,
     pressure: 0,
+    humidity: 0,
     wind_speed: 0,
+    wind_gust: 0,
+    wind_deg: 0,
+    sea_level: 0,
+    grnd_level: 0,
+    clouds: 0,
   };
 
   update(data: IOpenWeatherData): void {
@@ -26,31 +34,4 @@ class OpenWeather implements Weather {
   }
 }
 
-class OpenWeatherComplete implements Weather {
-  private _data: IOpenWeatherDataComplete = {
-    weather: '',
-    temp: 0,
-    description: '',
-    feels_like: 0,
-    temp_min: 0,
-    temp_max: 0,
-    pressure: 0,
-    humidity: 0,
-    wind_speed: 0,
-    wind_gust: 0,
-    wind_deg: 0,
-    sea_level: 0,
-    grnd_level: 0,
-    clouds: 0,
-  };
-
-  update(data: IOpenWeatherDataComplete): void {
-    this._data = data;
-  }
-
-  get(property: keyof IOpenWeatherDataComplete): any {
-    return this._data[property];
-  }
-}
-
-export { type Weather, OpenWeather, OpenWeatherComplete };
+export { type Weather, OpenWeather };

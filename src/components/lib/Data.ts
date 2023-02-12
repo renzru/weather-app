@@ -10,16 +10,14 @@ interface IOpenWeatherData extends IWeatherData {
   feels_like?: number;
   pressure?: number;
   wind_speed?: number;
-}
-
-interface IOpenWeatherDataComplete extends IOpenWeatherData {
-  temp_min: number;
-  temp_max: number;
-  wind_gust: number;
-  wind_deg: number;
-  sea_level: number;
-  grnd_level: number;
-  clouds: number;
+  temp_min?: number;
+  temp_max?: number;
+  visibility?: number;
+  wind_gust?: number;
+  wind_deg?: number;
+  sea_level?: number;
+  grnd_level?: number;
+  clouds?: number;
 }
 
 // Optional because sometimes Geo Data is unavailable
@@ -34,4 +32,4 @@ interface IUserData {
   long: number;
 }
 
-export { type IWeatherData, type IOpenWeatherData, type IOpenWeatherDataComplete, type IGeoData };
+export { type IWeatherData, type IOpenWeatherData, type IGeoData };

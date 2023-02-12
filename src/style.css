@@ -12,6 +12,9 @@
   --clr-black: #010313;
   --hover-1: #5d91aa;
 
+  --bg-grey-1: #efeef6;
+  --bg-grey-2: #d4d2df;
+
   /* Font sizes */
   --fs-normal: 1rem;
   --fs-500: 1.15rem;
@@ -166,4 +169,8 @@ body {
 
 .align-center {
   place-self: center;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, VueElement, onBeforeMount, watch } from 'vue';
+import { Ref, ref, onBeforeMount, watch } from 'vue';
 import { IWeatherData } from './lib/Data';
 import { OpenWeather } from './lib/Weather';
 import { OpenWeatherGeo } from './lib/Geo';
@@ -27,24 +27,31 @@ let loaded: Ref<boolean> = ref(false);
 let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
 onBeforeMount(() => {
-  userGeoService
-    .getUserGeo()
-    .then(([lat, long]: [number, number]) => {
-      latitude.value = lat;
-      longitude.value = long;
-      updateData(lat, long);
-    })
-    .catch(() => console.log('Error!'));
+  // Caching
+  const userGeo = localStorage.getItem('userGeo');
+
+  if (userGeo) {
+    [latitude.value, longitude.value] = JSON.parse(userGeo);
+  } else {
+    userGeoService
+      .getUserGeo()
+      .then((res) => {
+        localStorage.setItem('userGeo', JSON.stringify(res));
+        [latitude.value, longitude.value] = res as [number, number];
+      })
+      .catch(() => console.log('Error!'));
+  }
+
+  updateData(latitude.value, longitude.value);
 });
 
+//todo make openweatherdata just contain all data instead
 function updateData(lat: number, long: number): void {
   loaded.value = false;
-  Promise.all([weatherAPI.fetchWeather(lat, long), geoService.getLocation(lat, long)]).then(
+  // WeatherAPI is being used directly instead of the service because the entire response is required.
+  Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
     ([weatherData, geoData]) => {
-      /* 
-      WeatherAPI is being used directly instead of the service because the entire response is required.
-      */
-      weather.update(weatherEXT.extractData(weatherData));
+      weather.update(weatherData);
       weatherDetails.value = weatherData;
 
       geo.update(geoData);
@@ -113,7 +120,7 @@ watch([latitude, longitude], ([lat, long]) => {
   <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
   <!-- Details Modal -->
-  <DetailsModal v-if="loaded" :details="weatherDetails" />
+  <!-- <DetailsModal v-if="loaded" :details="weatherDetails" /> -->
 </template>
 
 <style scoped>
@@ -138,8 +145,8 @@ main {
   top: 0.55rem;
   padding: 0.55rem;
   line-height: 0;
-  background-color: #d4d2df;
   border-radius: 100%;
+  background-color: #d4d2df;
 }
 .weather-extra {
   position: relative;

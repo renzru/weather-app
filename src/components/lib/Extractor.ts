@@ -1,4 +1,4 @@
-import { IWeatherData, IOpenWeatherData, IOpenWeatherDataComplete, IGeoData } from './Data';
+import { IWeatherData, IOpenWeatherData, IGeoData } from './Data';
 
 interface IExtractor {
   extractData(body: any): IWeatherData;
@@ -7,25 +7,6 @@ interface IExtractor {
 class OpenWeatherExtractor implements IExtractor {
   extractData(body: any): IOpenWeatherData {
     // Destructuring
-    const { main: weather, icon, description } = body.weather[0];
-    const { temp, humidity, feels_like, pressure } = body.main;
-    const { speed: wind_speed } = body.wind;
-
-    return {
-      icon,
-      weather,
-      description,
-      temp,
-      humidity,
-      feels_like,
-      pressure,
-      wind_speed,
-    };
-  }
-}
-
-class OpenWeatherCompleteExtractor implements IExtractor {
-  extractData(body: any): IOpenWeatherDataComplete {
     const {
       weather,
       temp,
@@ -39,16 +20,19 @@ class OpenWeatherCompleteExtractor implements IExtractor {
     } = body.main;
     const { speed, gust, deg } = body.wind;
     const { all: clouds } = body.clouds;
-    const { description } = body.weather[0];
+    const { icon, description } = body.weather[0];
     const { name: location } = body;
     const { country } = body.sys;
+    const visibility = body.visibility;
 
     return {
+      icon,
       weather,
       temp,
       feels_like,
       temp_min,
       temp_max,
+      visibility,
       pressure,
       humidity,
       wind_speed: speed,
@@ -58,8 +42,6 @@ class OpenWeatherCompleteExtractor implements IExtractor {
       grnd_level,
       clouds,
       description,
-      location,
-      country,
     };
   }
 }
@@ -86,10 +68,4 @@ class GeocodingExtractor implements IGeoExtractor {
   }
 }
 
-export {
-  type IExtractor,
-  OpenWeatherExtractor,
-  OpenWeatherCompleteExtractor,
-  type IGeoExtractor,
-  GeocodingExtractor,
-};
+export { type IExtractor, OpenWeatherExtractor, type IGeoExtractor, GeocodingExtractor };
