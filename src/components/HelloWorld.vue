@@ -45,10 +45,8 @@ onBeforeMount(() => {
   updateData(latitude.value, longitude.value);
 });
 
-//todo make openweatherdata just contain all data instead
 function updateData(lat: number, long: number): void {
   loaded.value = false;
-  // WeatherAPI is being used directly instead of the service because the entire response is required.
   Promise.all([weatherService.getWeather(lat, long), geoService.getLocation(lat, long)]).then(
     ([weatherData, geoData]) => {
       weather.update(weatherData);
@@ -63,8 +61,6 @@ function updateData(lat: number, long: number): void {
 watch([latitude, longitude], ([lat, long]) => {
   updateData(lat, long);
 });
-
-// TODO: Add modal that displays complete weather data
 </script>
 
 <template>
