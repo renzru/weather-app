@@ -26,6 +26,7 @@ let longitude: Ref<number> = ref(0);
 let loaded: Ref<boolean> = ref(false);
 let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
+// TODO: add proper loading animation
 onBeforeMount(() => {
   // Caching
   const userGeo = localStorage.getItem('userGeo');
@@ -41,7 +42,6 @@ onBeforeMount(() => {
       })
       .catch(() => console.log('Error!'));
   }
-
   updateData(latitude.value, longitude.value);
 });
 
@@ -107,8 +107,8 @@ watch([latitude, longitude], ([lat, long]) => {
         </article>
         <hr />
         <article class="grid">
-          <h1 class="fs-normal text-light-2">Pressure</h1>
-          <p class="bold fs-700">{{ weather.get('humidity') }} hPa</p>
+          <h1 class="fs-normal text-light-2">Cloudiness</h1>
+          <p class="bold fs-700">{{ weather.get('clouds') }}%</p>
         </article>
       </section>
     </div>
@@ -116,7 +116,7 @@ watch([latitude, longitude], ([lat, long]) => {
   <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
   <!-- Details Modal -->
-  <!-- <DetailsModal v-if="loaded" :details="weatherDetails" /> -->
+  <DetailsModal v-if="loaded" :details="weatherDetails" />
 </template>
 
 <style scoped>

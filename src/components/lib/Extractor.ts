@@ -7,22 +7,12 @@ interface IExtractor {
 class OpenWeatherExtractor implements IExtractor {
   extractData(body: any): IOpenWeatherData {
     // Destructuring
-    const {
-      weather,
-      temp,
-      feels_like,
-      temp_min,
-      temp_max,
-      pressure,
-      humidity,
-      sea_level,
-      grnd_level,
-    } = body.main;
+
+    const { temp, feels_like, temp_min, temp_max, pressure, humidity, sea_level, grnd_level } =
+      body.main;
     const { speed, gust, deg } = body.wind;
     const { all: clouds } = body.clouds;
-    const { icon, description } = body.weather[0];
-    const { name: location } = body;
-    const { country } = body.sys;
+    const { icon, main: weather, description } = body.weather[0];
     const visibility = body.visibility;
 
     return {
