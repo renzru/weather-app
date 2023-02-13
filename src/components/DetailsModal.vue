@@ -10,8 +10,7 @@ const props = defineProps<{
   details: IWeatherData;
 }>();
 
-weather.update(weatherEXT.extractData(props.details));
-console.log(weather);
+weather.update(props.details);
 
 function getDirection(deg: number): string {
   if (deg > 337.5 || deg < 22.5) return 'N';
