@@ -1,5 +1,6 @@
-import { IGeoData, IWeatherData } from './Data';
+import { IGeoData, IOpenWeatherData, IWeatherData } from './Data';
 import { IWeatherAPI, IGeoAPI } from './API';
+import { IWeather } from './Weather';
 import { IExtractor, IGeoExtractor } from './Extractor';
 
 // TODO: Remove caching because data here is real-time/volatile and shouldnt be cached
@@ -31,10 +32,43 @@ class GeoService {
   }
 }
 
-class IconService {
-  getIcon(id: string): string {
-    return `http://openweathermap.org/img/wn/${id}@2x.png`;
+class OpenWeatherIconService {
+  private _descriptionMap: Map<string, string> = new Map<string, string>([
+    ['heavy thunderstorm', 'weather-icons/severe-thunderstorm.svg'],
+    [
+      'thunderstorm with rain' || 'thunderstorm with light rain' || 'thunderstorm with heavy rain',
+      'weather-icons/rain-thunderstorm.svg',
+    ],
+    ['shower rain', 'weather-icons/scattered-showers.svg'],
+    ['heavy intensity rain', 'weather-icons/heavy-rain.svg'],
+    ['heavy snow' || 'heavy shower snow', 'weather-icons/blizzard.svg'],
+    ['sleet', 'weather-icons/sleet.svg'],
+    ['fog', 'weather-icons/fog.svg'],
+    ['few clouds', 'weather-icons/partly-cloudy.svg'],
+  ]);
+
+  private _mainMap: Map<string, string> = new Map<string, string>([
+    ['Thunderstorm', 'weather-icons/severe-thunderstorm.svg'],
+    ['Drizzle', 'weather-icons/drizzle-sun.svg'],
+    ['Rain', 'weather-icons/rain.svg'],
+    ['Snow', 'weather-icons/snow.svg'],
+    ['Clear', 'weather-icons/sunny.svg'],
+    ['Clouds', 'weather-icons/cloudy.svg'],
+  ]);
+
+  getIcon(data: IWeather): string | undefined {
+    const weather = data.get('weather');
+    const description = data.get('description');
+
+    if (this._descriptionMap.has(description)) {
+      return this._descriptionMap.get(description);
+    } else return this._mainMap.get(weather);
   }
+
+  // private _isDayTime(): boolean {
+  //   let currentHour = new Date().getHours();
+  //   return currentHour > 6 && currentHour < 18;
+  // }
 }
 
 class UserGeoService {
@@ -52,4 +86,4 @@ class UserGeoService {
   }
 }
 
-export { WeatherService, GeoService, IconService, UserGeoService };
+export { WeatherService, GeoService, OpenWeatherIconService, UserGeoService };

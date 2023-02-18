@@ -4,7 +4,7 @@ import { IWeatherData } from './lib/Data';
 import { OpenWeather } from './lib/Weather';
 import { OpenWeatherGeo } from './lib/Geo';
 import { GeocodingAPI, OpenWeatherAPI } from './lib/API';
-import { GeoService, IconService, WeatherService, UserGeoService } from './lib/Service';
+import { GeoService, OpenWeatherIconService, WeatherService, UserGeoService } from './lib/Service';
 import { GeocodingExtractor, OpenWeatherExtractor } from './lib/Extractor';
 import DetailsModal from './DetailsModal.vue';
 
@@ -18,7 +18,7 @@ const geoAPI = new GeocodingAPI();
 const geoService = new GeoService(geoAPI, geoEXT);
 const geo = new OpenWeatherGeo();
 
-const iconService = new IconService();
+const iconService = new OpenWeatherIconService();
 const userGeoService = new UserGeoService();
 
 let latitude: Ref<number> = ref(0);
@@ -71,9 +71,7 @@ watch([latitude, longitude], ([lat, long]) => {
       <!-- Main Weather Data -->
       <section class="weather-main grid">
         <div class="grid">
-          <img
-            class="weather-icon align-center"
-            v-bind:src="iconService.getIcon(weather.get('icon'))" />
+          <img class="weather-icon align-center" v-bind:src="iconService.getIcon(weather)" />
           <h1 v-if="geo.get('country')" class="fs-normal align-start text-light-1">
             {{ geo.get('country') }}{{ geo.get('state') ? ',' : '' }} {{ geo.get('state') || '' }}
           </h1>
@@ -116,7 +114,7 @@ watch([latitude, longitude], ([lat, long]) => {
   <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
   <!-- Details Modal -->
-  <DetailsModal v-if="loaded" :details="weatherDetails" />
+  <!-- <DetailsModal v-if="loaded" :details="weatherDetails" /> -->
 </template>
 
 <style scoped>
@@ -134,6 +132,10 @@ main {
   place-items: center;
 }
 
+.weather-icon {
+  width: 8.5rem;
+  margin-bottom: 1rem;
+}
 .details-btn {
   position: absolute;
   aspect-ratio: 1;

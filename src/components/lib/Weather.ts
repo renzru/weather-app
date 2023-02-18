@@ -1,11 +1,11 @@
 import { IWeatherData, IOpenWeatherData } from './Data';
 
-interface Weather {
+interface IWeather {
   update(data: IWeatherData): void;
   get(property: string): any;
 }
 
-class OpenWeather implements Weather {
+class OpenWeather implements IWeather {
   private _data: IOpenWeatherData = {
     icon: '',
     weather: '',
@@ -34,4 +34,4 @@ class OpenWeather implements Weather {
   }
 }
 
-export { type Weather, OpenWeather };
+export { type IWeather, OpenWeather };

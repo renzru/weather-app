@@ -23,6 +23,8 @@ function getDirection(deg: number): string {
   if (deg > 22.5) return 'NE';
   return '';
 }
+
+// Todo, make units a lighter color
 </script>
 
 <template>
@@ -132,10 +134,11 @@ article .divider {
   position: absolute;
   padding: 5rem;
   margin: 0 auto;
-  background-color: white;
   left: 0;
   right: 0;
   width: 40rem;
+  border-radius: 0.4rem;
+  background-color: white;
 }
 
 .background::before {
