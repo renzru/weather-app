@@ -59,16 +59,8 @@ class OpenWeatherIconService {
   getIcon(data: IWeather): string | undefined {
     const weather = data.get('weather');
     const description = data.get('description');
-
-    if (this._descriptionMap.has(description)) {
-      return this._descriptionMap.get(description);
-    } else return this._mainMap.get(weather);
+    return this._descriptionMap.get(description) || this._mainMap.get(weather);
   }
-
-  // private _isDayTime(): boolean {
-  //   let currentHour = new Date().getHours();
-  //   return currentHour > 6 && currentHour < 18;
-  // }
 }
 
 class UserGeoService {

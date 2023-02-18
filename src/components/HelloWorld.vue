@@ -24,6 +24,7 @@ const userGeoService = new UserGeoService();
 let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
 let loaded: Ref<boolean> = ref(false);
+let weatherIcon: Ref<string> = ref('');
 let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
 // TODO: add proper loading animation
@@ -53,6 +54,8 @@ function updateData(lat: number, long: number): void {
       weatherDetails.value = weatherData;
 
       geo.update(geoData);
+
+      weatherIcon = iconService.getIcon(weather);
       loaded.value = true;
     }
   );
@@ -71,7 +74,7 @@ watch([latitude, longitude], ([lat, long]) => {
       <!-- Main Weather Data -->
       <section class="weather-main grid">
         <div class="grid">
-          <img class="weather-icon align-center" v-bind:src="iconService.getIcon(weather)" />
+          <img class="weather-icon align-center" v-bind:src="weatherIcon" />
           <h1 v-if="geo.get('country')" class="fs-normal align-start text-light-1">
             {{ geo.get('country') }}{{ geo.get('state') ? ',' : '' }} {{ geo.get('state') || '' }}
           </h1>
