@@ -24,6 +24,7 @@ const userGeoService = new UserGeoService();
 let latitude: Ref<number> = ref(0);
 let longitude: Ref<number> = ref(0);
 let loaded: Ref<boolean> = ref(false);
+let showDetails: Ref<boolean> = ref(false);
 let weatherIcon: Ref<string> = ref('');
 let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
@@ -61,6 +62,10 @@ function updateData(lat: number, long: number): void {
   );
 }
 
+function toggleDetails(): void {
+  showDetails.value = !showDetails.value;
+}
+
 watch([latitude, longitude], ([lat, long]) => {
   updateData(lat, long);
 });
@@ -89,35 +94,52 @@ watch([latitude, longitude], ([lat, long]) => {
         </div>
       </section>
       <!-- Additional Weather Data -->
-      <section class="weather-extra flex">
-        <button class="details-btn">i</button>
+      <section class="weather-extra relative grid flow">
+        <h1 class="fs-normal bold uppercase text-light-2 relative">
+          Conditions
+          <button class="details-btn fs-300" @click="toggleDetails()">See More</button>
+        </h1>
 
-        <article class="grid">
-          <h1 class="fs-normal text-light-2">Feels like</h1>
-          <p class="bold fs-700">{{ weather.get('feels_like') }}°</p>
-        </article>
-        <hr />
-        <article class="grid">
-          <h1 class="fs-normal text-light-2">Humidity</h1>
-          <p class="bold fs-700">{{ weather.get('humidity') }}%</p>
-        </article>
-        <hr />
-        <article class="grid">
-          <h1 class="fs-normal text-light-2">Wind</h1>
-          <p class="bold fs-700">{{ weather.get('wind_speed') }}m/s</p>
-        </article>
-        <hr />
-        <article class="grid">
-          <h1 class="fs-normal text-light-2">Cloudiness</h1>
-          <p class="bold fs-700">{{ weather.get('clouds') }}%</p>
-        </article>
+        <div class="flex">
+          <article class="grid relative">
+            <div class="flex">
+              <h1 class="fs-normal text-light-2">Feels like</h1>
+              <img src="/feels-like.svg" class="weather-icon-extra" />
+            </div>
+            <p class="bold fs-500">{{ weather.get('feels_like') }}°</p>
+          </article>
+          <hr />
+          <article class="grid relative">
+            <img src="/humidity-percent.svg" class="weather-icon-extra" />
+            <div>
+              <h1 class="fs-normal text-light-2">Humidity</h1>
+              <p class="bold fs-500">{{ weather.get('humidity') }}%</p>
+            </div>
+          </article>
+          <hr />
+          <article class="grid relative">
+            <div class="flex">
+              <img src="/wind-speed.svg" class="weather-icon-extra" />
+              <h1 class="fs-normal text-light-2">Wind</h1>
+            </div>
+            <p class="bold fs-500">{{ weather.get('wind_speed') }}m/s</p>
+          </article>
+          <hr />
+          <article class="grid relative">
+            <div class="flex">
+              <img src="/cloudiness.svg" class="weather-icon-extra" />
+              <h1 class="fs-normal text-light-2">Cloudiness</h1>
+            </div>
+            <p class="bold fs-500">{{ weather.get('clouds') }}%</p>
+          </article>
+        </div>
       </section>
     </div>
   </main>
   <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
   <!-- Details Modal -->
-  <!-- <DetailsModal v-if="loaded" :details="weatherDetails" /> -->
+  <DetailsModal v-if="loaded && showDetails" @hide="toggleDetails()" :details="weatherDetails" />
 </template>
 
 <style scoped>
@@ -139,22 +161,40 @@ main {
   width: 8.5rem;
   margin-bottom: 1rem;
 }
+
 .details-btn {
   position: absolute;
-  aspect-ratio: 1;
-  right: 0.55rem;
-  top: 0.55rem;
-  padding: 0.55rem;
-  line-height: 0;
-  border-radius: 100%;
-  background-color: #d4d2df;
+  right: 0;
+  padding: 0.15rem 0.5rem;
+  font-weight: 500;
+  color: white;
+  border-radius: 5rem;
+  background-color: #5590f0;
+  transition: all 0.25s ease;
+}
+
+.details-btn:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }
 .weather-extra {
-  position: relative;
-  justify-content: center;
-  padding: 2rem 3rem;
+  --flow-margin: 0.75rem;
+  padding: 1.2rem 3rem;
   border-radius: 0.85rem;
-  background-color: #efeef6;
+  background-color: #f6f4fa;
+  box-shadow: 0 1px 1px rgb(0, 0, 0, 0.25);
+}
+
+.weather-extra hr {
+  border: 1px solid var(--clr-light-2);
+  opacity: 0.2;
+}
+
+.weather-icon-extra {
+  position: absolute;
+  opacity: 0.5;
+  left: -1.25rem;
+  width: 1.25rem;
 }
 
 .body {

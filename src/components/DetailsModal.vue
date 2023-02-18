@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { IWeatherData } from './lib/Data';
-import { OpenWeatherExtractor } from './lib/Extractor';
 import { OpenWeather } from './lib/Weather';
 
 const weather = new OpenWeather();
-
 const props = defineProps<{
   details: IWeatherData;
 }>();
 
+const emit = defineEmits(['hide']);
+
 weather.update(props.details);
-console.log(weather);
 
 function getDirection(deg: number): string {
   if (deg > 337.5 || deg < 22.5) return 'N';
@@ -23,12 +22,11 @@ function getDirection(deg: number): string {
   if (deg > 22.5) return 'NE';
   return '';
 }
-
-// Todo, make units a lighter color
 </script>
 
 <template>
   <div class="details flow">
+    <button @click="emit('hide')">X</button>
     <article>
       <div class="divider flex">
         <h1 class="fs-normal uppercase bold text-light-2">Main</h1>
