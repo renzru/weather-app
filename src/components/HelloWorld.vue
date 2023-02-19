@@ -53,7 +53,7 @@ function updateData(lat: number, long: number): void {
     ([weatherData, geoData]) => {
       weather.update(weatherData);
       weatherDetails.value = weatherData;
-
+      console.log(weatherDetails.value);
       geo.update(geoData);
 
       weatherIcon = iconService.getIcon(weather);
@@ -139,7 +139,9 @@ watch([latitude, longitude], ([lat, long]) => {
   <!-- Loading Screen -->
   <div v-else="!loaded">Loading...</div>
   <!-- Details Modal -->
-  <DetailsModal v-if="loaded && showDetails" @hide="toggleDetails()" :details="weatherDetails" />
+  <Transition name="slide">
+    <DetailsModal v-if="loaded && showDetails" @hide="toggleDetails()" :details="weatherDetails" />
+  </Transition>
 </template>
 
 <style scoped>
@@ -200,5 +202,29 @@ main {
 .body {
   font-weight: normal;
   font-family: 'Source Sans Pro';
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.slide-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-leave-from {
+  opacity: 1;
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 </style>
