@@ -137,7 +137,9 @@ watch([latitude, longitude], ([lat, long]) => {
     </div>
   </main>
   <!-- Loading Screen -->
-  <div v-else="!loaded">Loading...</div>
+  <div v-else="!loaded" class="loading-wrapper flex">
+    <img src="/loading.png" class="loading-icon" />
+  </div>
   <!-- Details Modal -->
   <Transition name="slide">
     <DetailsModal v-if="loaded && showDetails" @hide="toggleDetails()" :details="weatherDetails" />
@@ -164,6 +166,25 @@ main {
   margin-bottom: 1rem;
 }
 
+.loading-wrapper {
+  width: 100vw;
+  height: 100vh;
+  place-items: center;
+}
+.loading-icon {
+  margin: 0 auto;
+  width: 8rem;
+  animation: rotate 1.25s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .details-btn {
   position: absolute;
   right: 0;
@@ -204,25 +225,22 @@ main {
   font-family: 'Source Sans Pro';
 }
 
+/* Vue Transitions */
 .slide-enter-from {
   opacity: 0;
   transform: translateY(100%);
 }
-
 .slide-enter-to {
   opacity: 1;
   transform: translateY(0);
 }
-
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.5s ease;
 }
-
 .slide-leave-from {
   opacity: 1;
 }
-
 .slide-leave-to {
   opacity: 0;
   transform: translateY(100%);

@@ -129,11 +129,12 @@ article .divider {
   z-index: 2;
   position: absolute;
   padding: 5rem;
-  margin: 0 auto;
+  margin: auto;
+  position: absolute;
   left: 0;
   right: 0;
-  width: 40rem;
   top: 10%;
+  width: 40rem;
   border-radius: 0.4rem;
   background-color: white;
   box-shadow: 0px 0px 1px 100vw rgba(0, 0, 0, 0.75);
