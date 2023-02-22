@@ -24,6 +24,10 @@ interface IGeoAPI {
   fetchLocation(lat: number, long: number): Promise<IGeoData>;
 }
 
+interface IGeoDirectAPI {
+  fetchLocation(location: string): Promise<IGeoData>;
+}
+
 class GeocodingAPI implements IGeoAPI {
   async fetchLocation(lat: number, long: number) {
     const url: URL = new URL('http://api.openweathermap.org/geo/1.0/reverse');
@@ -39,4 +43,24 @@ class GeocodingAPI implements IGeoAPI {
   }
 }
 
-export { type IWeatherAPI, OpenWeatherAPI, type IGeoAPI, GeocodingAPI };
+class GeocodingDirectAPI implements IGeoDirectAPI {
+  async fetchLocation(location: string): Promise<IGeoData> {
+    const url: URL = new URL('http://api.openweathermap.org/geo/1.0/direct');
+    url.search = new URLSearchParams({
+      q: location,
+      appid: 'f4bffb3aa4a3d21bc95242b50d8471df',
+    }).toString();
+
+    const data = await (await fetch(url.toString(), { mode: 'cors' })).json();
+    return data;
+  }
+}
+
+export {
+  type IWeatherAPI,
+  OpenWeatherAPI,
+  type IGeoAPI,
+  type IGeoDirectAPI,
+  GeocodingAPI,
+  GeocodingDirectAPI,
+};

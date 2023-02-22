@@ -32,6 +32,10 @@ class OpenWeather implements IWeather {
   get(property: keyof IOpenWeatherData): any {
     return this._data[property];
   }
+
+  getList(): any {
+    return this._data;
+  }
 }
 
 export { type IWeather, OpenWeather };

@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Montserrat', 'sans-serif';
+  font-family: 'Inter', 'sans-serif';
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -9,7 +9,7 @@
 
   --clr-light-1: #c2c0c9;
   --clr-light-2: #706f7b;
-  --clr-black: #010313;
+  --clr-dark: #010313;
   --hover-1: #5d91aa;
 
   --bg-grey-1: #efeef6;
@@ -25,6 +25,22 @@
   --fs-900: 2.5rem;
 }
 
+.clr-light-1 {
+  color: var(--clr-light-1);
+}
+
+
+.clr-light-2 {
+  color: var(--clr-light-2);
+}
+
+.clr-white {
+  color: #ffffff;
+}
+
+.clr-dark {
+  color: var(--clr-dark);
+}
 
 /* Reset */
 
@@ -113,6 +129,7 @@ body {
   height: 100vh;
   overflow-x: hidden;
   color: var(--clr-black);
+  backgroun
 }
 
 .flow>*+* {
@@ -153,27 +170,6 @@ body {
 
 .light {
   font-weight: lighter;
-}
-
-
-.text-light-1 {
-  color: var(--clr-light-1)
-}
-
-.text-light-2 {
-  color: var(--clr-light-2);
-}
-
-.text-black {
-  color: var(--clr-black)
-}
-
-.align-start {
-  place-self: start;
-}
-
-.align-center {
-  place-self: center;
 }
 
 .relative {

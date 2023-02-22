@@ -39,7 +39,7 @@ class OpenWeatherExtractor implements IExtractor {
 // For Geodata
 
 interface IGeoExtractor {
-  extractData(body: any): IGeoData;
+  extractData(body: any): any;
 }
 
 class GeocodingExtractor implements IGeoExtractor {
@@ -58,4 +58,25 @@ class GeocodingExtractor implements IGeoExtractor {
   }
 }
 
-export { type IExtractor, OpenWeatherExtractor, type IGeoExtractor, GeocodingExtractor };
+class GeocodingDirectExtractor implements IGeoExtractor {
+  extractData = (body: any): any => {
+    if (!body.length) {
+      return {};
+    }
+
+    console.log(body);
+    const { lat, lon } = body[0];
+
+    return {
+      lat,
+      lon,
+    };
+  };
+}
+export {
+  type IExtractor,
+  OpenWeatherExtractor,
+  type IGeoExtractor,
+  GeocodingDirectExtractor,
+  GeocodingExtractor,
+};

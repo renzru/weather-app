@@ -1,5 +1,5 @@
 import { IGeoData, IOpenWeatherData, IWeatherData } from './Data';
-import { IWeatherAPI, IGeoAPI } from './API';
+import { IWeatherAPI, IGeoAPI, IGeoDirectAPI } from './API';
 import { IWeather } from './Weather';
 import { IExtractor, IGeoExtractor } from './Extractor';
 
@@ -29,6 +29,20 @@ class GeoService {
 
   async getLocation(lat: number, long: number): Promise<IGeoData> {
     return this._extractor.extractData(await this._geoAPI.fetchLocation(lat, long));
+  }
+}
+
+class GeoDirectService {
+  private _geoAPI: IGeoDirectAPI;
+  private _extractor: IGeoExtractor;
+
+  constructor(geoAPI: IGeoDirectAPI, extractor: IGeoExtractor) {
+    this._geoAPI = geoAPI;
+    this._extractor = extractor;
+  }
+
+  async getLocation(location: string): any {
+    return this._extractor.extractData(await this._geoAPI.fetchLocation(location));
   }
 }
 
@@ -78,4 +92,4 @@ class UserGeoService {
   }
 }
 
-export { WeatherService, GeoService, OpenWeatherIconService, UserGeoService };
+export { WeatherService, GeoService, GeoDirectService, OpenWeatherIconService, UserGeoService };
