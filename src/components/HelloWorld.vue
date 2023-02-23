@@ -64,6 +64,7 @@ onBeforeMount(() => {
 
 async function updateData(lat: number, long: number): Promise<void> {
   loaded.value = false;
+
   const [weatherData, geoData] = await Promise.all([
     weatherService.getWeather(lat, long),
     geoService.getLocation(lat, long),
@@ -71,7 +72,6 @@ async function updateData(lat: number, long: number): Promise<void> {
 
   weather.update(weatherData);
   geo.update(geoData);
-  console.log(geo);
   loaded.value = true;
 }
 
@@ -80,29 +80,25 @@ function toggleDetails(): void {
   showDetails.value = !showDetails.value;
 }
 
-async function submitQueryLocation(): Promise<void> {
-  loaded.value = false;
-  geoDirectService.getLocation(location.value).then(({ lat, lon }) => {
-    [latitude.value, longitude.value] = [lat, lon];
-  });
-
-  await updateData(latitude.value, longitude.value);
-  loaded.value = true;
+async function queryLocation(): Promise<void> {
+  const [lat, lon] = await geoDirectService.getLocation(location.value);
+  [latitude.value, longitude.value] = [lat, lon];
+  updateData(lat, lon);
 }
 
-async function submitQueryCoord(): Promise<void> {
-  loaded.value = false;
-  await updateData(latitude.value, longitude.value).catch((err) => console.log(err));
-  loaded.value = true;
+function queryCoord(): void {
+  updateData(latitude.value, longitude.value).catch((err) => console.log(err));
 }
 </script>
 
 <template>
-  <input v-model="location" />
-  <input v-model="latitude" max="90" type="number" />
-  <input v-model="longitude" max="180" type="number" />
-  <button @click="submitQueryLocation()">submit loc</button>
-  <button @click="submitQueryCoord()">submit coord</button>
+  <div>
+    <input v-model="location" />
+    <input v-model="latitude" max="90" type="number" />
+    <input v-model="longitude" max="180" type="number" />
+    <button @click="queryLocation()">submit loc</button>
+    <button @click="queryCoord()">submit coord</button>
+  </div>
   <main v-show="loaded" class="">
     <div>
       <section>
