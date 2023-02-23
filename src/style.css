@@ -9,6 +9,7 @@
 
   --clr-light-1: #c2c0c9;
   --clr-light-2: #706f7b;
+  --clr-white: #ffffff;
   --clr-dark: #010313;
   --hover-1: #5d91aa;
 
@@ -16,19 +17,23 @@
   --bg-grey-2: #d4d2df;
 
   /* Font sizes */
-  --fs-300: 0.85rem;
-  --fs-normal: 1rem;
-  --fs-500: 1.15rem;
-  --fs-600: 1.75rem;
-  --fs-700: 1.85rem;
-  --fs-800: 2rem;
-  --fs-900: 2.5rem;
+  --fs-300: 12px;
+  --fs-normal: 16px;
+  --fs-500: 18px;
+  --fs-600: 28px;
+  --fs-700: 32px;
+  --fs-800: 36px;
+  --fs-900: 45px;
 }
 
 .clr-light-1 {
   color: var(--clr-light-1);
 }
 
+.dark-mode {
+  color: white;
+  --clr-white: #1d1d1d;
+}
 
 .clr-light-2 {
   color: var(--clr-light-2);
@@ -128,8 +133,6 @@ p {
 body {
   height: 100vh;
   overflow-x: hidden;
-  color: var(--clr-black);
-  backgroun
 }
 
 .flow>*+* {

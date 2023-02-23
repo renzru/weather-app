@@ -71,6 +71,7 @@ async function updateData(lat: number, long: number): Promise<void> {
 
   weather.update(weatherData);
   geo.update(geoData);
+  console.log(geo);
   loaded.value = true;
 }
 
@@ -81,15 +82,11 @@ function toggleDetails(): void {
 
 async function submitQueryLocation(): Promise<void> {
   loaded.value = false;
-  try {
-    await geoDirectService.getLocation(location.value).then(({ lat, lon }) => {
-      [latitude.value, longitude.value] = [lat, lon];
-    });
+  geoDirectService.getLocation(location.value).then(({ lat, lon }) => {
+    [latitude.value, longitude.value] = [lat, lon];
+  });
 
-    await updateData(latitude.value, longitude.value);
-  } catch (err) {
-    console.log(err);
-  }
+  await updateData(latitude.value, longitude.value);
   loaded.value = true;
 }
 
@@ -106,45 +103,103 @@ async function submitQueryCoord(): Promise<void> {
   <input v-model="longitude" max="180" type="number" />
   <button @click="submitQueryLocation()">submit loc</button>
   <button @click="submitQueryCoord()">submit coord</button>
+  <main v-show="loaded" class="">
+    <div>
+      <section>
+        <h1 class="fs-300">Today</h1>
+        <h2 class="fs-600 bold">{{ geo.get('city') }}</h2>
+      </section>
+      <section class="weather-data-container flex">
+        <img class="weather-icon" :src="iconService.getIcon(weather)" />
+        <h1 class="fs-900 temp">{{ weather.get('temp') }}°</h1>
+        <span class="info-btn-wrapper">
+          <h2 class="fs-normal">Experiencing {{ weather.get('description') }}.</h2>
+          <button class="info-btn fs-300">More Info</button>
+        </span>
+      </section>
+    </div>
+  </main>
+
   <!-- Loading Screen -->
-  <!-- <div v-show="!loaded" class="loading-wrapper flex">
+  <div v-show="!loaded" class="loading-wrapper flex">
     <img src="/loading.png" class="loading-icon" />
-  </div> -->
+  </div>
   <!-- Details Modal -->
   <!-- <Transition name="slide">
     <DetailsModal v-if="loaded && showDetails" @hide="toggleDetails()" :details="weatherDetails" />
   </Transition> -->
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 main {
+  display: grid;
   grid-template-areas: '. content .';
-  grid-template-columns: minmax(2rem, 1fr) 40rem minmax(2rem, 1fr);
+  grid-template-columns: minmax(2rem, 1fr) clamp(20rem, 50vw, 40rem) minmax(2rem, 1fr);
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--clr-white);
+
+  > div {
+    grid-area: content;
+  }
 }
 
-.weather {
-  --flow-margin: 2.5rem;
-  grid-area: content;
-}
-
-.weather-main {
+.weather-data-container {
   place-items: center;
+  flex-direction: column;
+
+  .weather-icon {
+    width: clamp(10rem, 6vw, 10rem);
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    animation-fill-mode: forwards;
+    animation: floating 6s infinite ease-in-out;
+  }
+  .temp {
+    font-weight: 700;
+  }
+  .info-btn-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .info-btn {
+      display: inline-block;
+      border-radius: 2.5rem;
+      background-color: #2b91ff;
+      padding: 0.25rem 0.5rem;
+      color: white;
+    }
+  }
 }
 
-.weather-icon {
-  width: 8.5rem;
-  margin-bottom: 1rem;
+@keyframes floating {
+  0% {
+    transform: translateY(2%);
+  }
+
+  60% {
+    transform: translateY(-2%);
+  }
+
+  80% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(2%);
+  }
 }
 
 .loading-wrapper {
   width: 100vw;
   height: 100vh;
   place-items: center;
-}
-.loading-icon {
-  margin: 0 auto;
-  width: 8rem;
-  animation: rotate 1.25s infinite linear;
+
+  .loading-icon {
+    margin: 0 auto;
+    width: 8rem;
+    animation: rotate 1.25s infinite linear;
+  }
 }
 
 @keyframes rotate {
@@ -155,44 +210,12 @@ main {
     transform: rotate(360deg);
   }
 }
-.details-btn {
-  position: absolute;
-  right: 0;
-  padding: 0.15rem 0.5rem;
-  font-weight: 500;
-  color: white;
-  border-radius: 5rem;
-  background-color: #5590f0;
-  transition: all 0.25s ease;
-}
-
-.details-btn:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-}
-.weather-extra {
-  --flow-margin: 0.75rem;
-  padding: 1.2rem 3rem;
-  border-radius: 0.85rem;
-  background-color: #f6f4fa;
-  box-shadow: 0 1px 1px rgb(0, 0, 0, 0.25);
-}
-
-.weather-extra hr {
-  border: 1px solid var(--clr-light-2);
-  opacity: 0.2;
-}
 
 .weather-icon-extra {
   position: absolute;
   opacity: 0.5;
   left: -1.25rem;
   width: 1.25rem;
-}
-
-.body {
-  font-weight: normal;
-  font-family: 'Source Sans Pro';
 }
 
 /* Vue Transitions */
