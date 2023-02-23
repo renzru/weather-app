@@ -81,7 +81,7 @@ function toggleDetails(): void {
 }
 
 async function queryLocation(): Promise<void> {
-  const [lat, lon] = await geoDirectService.getLocation(location.value);
+  const { lat, lon } = await geoDirectService.getLocation(location.value);
   [latitude.value, longitude.value] = [lat, lon];
   updateData(lat, lon);
 }
