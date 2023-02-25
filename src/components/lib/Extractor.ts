@@ -1,13 +1,11 @@
-import { IWeatherData, IOpenWeatherData, IGeoData } from './Data';
-
+import { IWeatherData, IOpenWeatherData, IGeoData, IForecastData } from './Data';
+import { format } from 'date-fns';
 interface IExtractor {
   extractData(body: any): IWeatherData;
 }
 
 class OpenWeatherExtractor implements IExtractor {
   extractData(body: any): IOpenWeatherData {
-    // Destructuring
-
     const { temp, feels_like, temp_min, temp_max, pressure, humidity, sea_level, grnd_level } =
       body.main;
     const { speed, gust, deg } = body.wind;
@@ -33,6 +31,24 @@ class OpenWeatherExtractor implements IExtractor {
       clouds,
       description,
     };
+  }
+}
+
+class OpenWeatherForecastExtractor implements IExtractor {
+  extractData(body: any): IForecastData {
+    const dailyForecasts = body.list
+      .filter((data) => data.dt_txt.split(' ')[1] === '12:00:00')
+      .map((data) => {
+        return {
+          weather: data.weather[0].main,
+          date: format(new Date(Date.parse(data.dt_txt.split(' ')[0])), 'dd eee '),
+          description: data.weather[0].description,
+          temp: data.main.temp,
+          precipitation: data.pop,
+        };
+      });
+
+    return dailyForecasts;
   }
 }
 
@@ -76,6 +92,7 @@ class GeocodingDirectExtractor implements IGeoExtractor {
 export {
   type IExtractor,
   OpenWeatherExtractor,
+  OpenWeatherForecastExtractor,
   type IGeoExtractor,
   GeocodingDirectExtractor,
   GeocodingExtractor,

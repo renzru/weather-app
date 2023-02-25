@@ -1,4 +1,4 @@
-import { IGeoData, IOpenWeatherData, IWeatherData } from './Data';
+import { IForecastData, IGeoData, IOpenWeatherData, IWeatherData } from './Data';
 import { IWeatherAPI, IGeoAPI, IGeoDirectAPI } from './API';
 import { IWeather } from './Weather';
 import { IExtractor, IGeoExtractor } from './Extractor';
@@ -14,6 +14,20 @@ class WeatherService {
   }
 
   async getWeather(lat: number, long: number): Promise<IWeatherData> {
+    return this._extractor.extractData(await this._weatherAPI.fetchWeather(lat, long));
+  }
+}
+
+class ForecastService {
+  private _weatherAPI: IWeatherAPI;
+  private _extractor: IExtractor;
+
+  constructor(weatherAPI: IWeatherAPI, extractor: IExtractor) {
+    this._weatherAPI = weatherAPI;
+    this._extractor = extractor;
+  }
+
+  async getForecast(lat: number, long: number): Promise<Array<IForecastData>> {
     return this._extractor.extractData(await this._weatherAPI.fetchWeather(lat, long));
   }
 }
@@ -41,7 +55,7 @@ class GeoDirectService {
     this._extractor = extractor;
   }
 
-  async getLocation(location: string): any {
+  async getLocation(location: string): Promise<any> {
     return this._extractor.extractData(await this._geoAPI.fetchLocation(location));
   }
 }
@@ -70,9 +84,7 @@ class OpenWeatherIconService {
     ['Clouds', 'weather-icons/cloudy.svg'],
   ]);
 
-  getIcon(data: IWeather): string | undefined {
-    const weather = data.get('weather');
-    const description = data.get('description');
+  getIcon(weather: string, description: string): string | undefined {
     return this._descriptionMap.get(description) || this._mainMap.get(weather);
   }
 }
@@ -92,4 +104,11 @@ class UserGeoService {
   }
 }
 
-export { WeatherService, GeoService, GeoDirectService, OpenWeatherIconService, UserGeoService };
+export {
+  WeatherService,
+  ForecastService,
+  GeoService,
+  GeoDirectService,
+  OpenWeatherIconService,
+  UserGeoService,
+};

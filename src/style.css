@@ -10,6 +10,7 @@
   --clr-light-1: #c2c0c9;
   --clr-light-2: #706f7b;
   --clr-white: #ffffff;
+  --clr-black: #000000;
   --clr-dark: #010313;
   --hover-1: #5d91aa;
 
@@ -17,13 +18,13 @@
   --bg-grey-2: #d4d2df;
 
   /* Font sizes */
-  --fs-300: 12px;
-  --fs-normal: 16px;
-  --fs-500: 18px;
-  --fs-600: 28px;
-  --fs-700: 32px;
-  --fs-800: 36px;
-  --fs-900: 45px;
+  --fs-300: 10px;
+  --fs-normal: 14px;
+  --fs-500: 16px;
+  --fs-600: 25px;
+  --fs-700: 28px;
+  --fs-800: 32px;
+  --fs-900: 40px;
 }
 
 .clr-light-1 {
@@ -31,8 +32,9 @@
 }
 
 .dark-mode {
-  color: white;
   --clr-white: #1d1d1d;
+  --clr-black: #ffffff;
+  color: var(--clr-black);
 }
 
 .clr-light-2 {
@@ -49,14 +51,15 @@
 
 /* Reset */
 
-@media screen and (min-width: 40em) {
+@media (min-width: 30em) {
   :root {
-    /* --fs-default: 1rem;
-    --fs-500: 1.15rem;
-    --fs-600: 1.75rem;
-    --fs-700: 1.85rem;
-    --fs-800: 2rem;
-    --fs-900: 2.5rem; */
+    --fs-300: 12px;
+    --fs-normal: 16px;
+    --fs-500: 18px;
+    --fs-600: 28px;
+    --fs-700: 32px;
+    --fs-800: 36px;
+    --fs-900: 45px;
   }
 }
 
@@ -133,6 +136,12 @@ p {
 body {
   height: 100vh;
   overflow-x: hidden;
+  box-sizing: border-box;
+  color: var(--clr-black);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .flow>*+* {
@@ -181,4 +190,10 @@ body {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.btn-style-1 {
+  color: white;
+  background-color: #2b91ff;
+  border-radius: 2.5rem;
 }

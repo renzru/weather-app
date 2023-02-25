@@ -20,6 +20,10 @@ interface IOpenWeatherData extends IWeatherData {
   clouds?: number;
 }
 
+interface IForecastData extends IWeatherData {
+  precipitation: number;
+  date: string;
+}
 // Optional because sometimes Geo Data is unavailable
 interface IGeoData {
   country?: string;
@@ -32,4 +36,4 @@ interface IUserData {
   long: number;
 }
 
-export { type IWeatherData, type IOpenWeatherData, type IGeoData };
+export { type IWeatherData, type IOpenWeatherData, type IForecastData, type IGeoData };

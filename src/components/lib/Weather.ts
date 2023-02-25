@@ -1,8 +1,24 @@
-import { IWeatherData, IOpenWeatherData } from './Data';
+import { IWeatherData, IOpenWeatherData, IForecastData } from './Data';
 
 interface IWeather {
   update(data: IWeatherData): void;
   get(property: string): any;
+}
+
+class OpenWeatherForecast {
+  private _data: Array<IForecastData> = [];
+
+  update(data: Array<IForecastData>): void {
+    this._data = data;
+  }
+
+  get(index: number, property: keyof IForecastData): any {
+    return this._data[index][property];
+  }
+
+  getList(): Array<IForecastData> {
+    return this._data;
+  }
 }
 
 class OpenWeather implements IWeather {
@@ -38,4 +54,4 @@ class OpenWeather implements IWeather {
   }
 }
 
-export { type IWeather, OpenWeather };
+export { type IWeather, OpenWeather, OpenWeatherForecast };

@@ -20,6 +20,21 @@ class OpenWeatherAPI implements IWeatherAPI {
   }
 }
 
+class OpenWeatherForecastAPI implements IWeatherAPI {
+  async fetchWeather(lat: number, long: number): Promise<IWeatherData> {
+    const url: URL = new URL('https://api.openweathermap.org/data/2.5/forecast');
+    url.search = new URLSearchParams({
+      lat: lat.toString(),
+      lon: long.toString(),
+      appid: 'f4bffb3aa4a3d21bc95242b50d8471df',
+      units: 'metric',
+    }).toString();
+
+    const data = await (await fetch(url.toString(), { mode: 'cors' })).json();
+    return data;
+  }
+}
+
 interface IGeoAPI {
   fetchLocation(lat: number, long: number): Promise<IGeoData>;
 }
@@ -59,6 +74,7 @@ class GeocodingDirectAPI implements IGeoDirectAPI {
 export {
   type IWeatherAPI,
   OpenWeatherAPI,
+  OpenWeatherForecastAPI,
   type IGeoAPI,
   type IGeoDirectAPI,
   GeocodingAPI,
