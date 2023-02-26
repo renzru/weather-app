@@ -125,19 +125,9 @@ function queryCoord(): void {
 
     <main v-if="loaded">
       <div class="flow">
-        <section>
+        <section class="relative">
           <h1 class="fs-300">Today</h1>
           <h2 class="fs-600 bold">{{ geo.get('city') }}</h2>
-        </section>
-        <section class="weather-data-container flex">
-          <img
-            class="weather-icon"
-            :src="iconService.getIcon(weather.get('weather'), weather.get('description'))" />
-          <h1 class="fs-900 temp">{{ weather.get('temp') }}°</h1>
-          <div class="info-btn-wrapper">
-            <h2 class="fs-normal">Experiencing {{ weather.get('description') }}.</h2>
-            <button class="info-btn btn-style-1 fs-300">More Info</button>
-          </div>
           <section class="info-container grid">
             <div class="info-card flex">
               <svg
@@ -180,6 +170,16 @@ function queryCoord(): void {
             </div>
           </section>
         </section>
+        <section class="weather-data-container flex">
+          <img
+            class="weather-icon"
+            :src="iconService.getIcon(weather.get('weather'), weather.get('description'))" />
+          <h1 class="fs-900 temp">{{ weather.get('temp') }}°</h1>
+          <div class="info-btn-wrapper">
+            <h2 class="fs-normal">Experiencing {{ weather.get('description') }}.</h2>
+            <button class="info-btn btn-style-1 fs-300">More Info</button>
+          </div>
+        </section>
 
         <section>
           <h2 class="fs-600 bold">Forecast</h2>
@@ -217,15 +217,16 @@ main {
 .info-container {
   position: absolute;
   left: 0;
-  gap: 1rem;
+  margin-top: 0.25rem;
+  gap: 0.25rem;
 
   .info-card {
     place-items: center;
     gap: 0.25rem;
 
     .info-icon {
-      width: 2rem;
-      height: 2rem;
+      width: 1.25rem;
+      height: 1.25rem;
       color: var(--clr-black);
     }
   }
@@ -294,7 +295,6 @@ main {
 
 .weather-data-container {
   place-items: center;
-  position: relative;
   flex-direction: column;
 
   &.dark-mode {
