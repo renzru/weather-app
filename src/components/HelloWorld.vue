@@ -209,6 +209,7 @@ main {
   background-color: var(--clr-white);
 
   > div {
+    --flow-margin: 2.5rem;
     grid-area: content;
   }
 }
