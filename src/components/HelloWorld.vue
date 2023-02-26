@@ -42,6 +42,7 @@ let longitude: Ref<number> = ref(0);
 let queryMode: Ref<string> = ref('Name');
 let loaded: Ref<boolean> = ref(false);
 let showDetails: Ref<boolean> = ref(false);
+let badRequest: Ref<boolean> = ref(false);
 // let weatherIcon: Ref<string | undefined> = ref('');
 let weatherDetails: Ref<IWeatherData> = ref({} as IWeatherData);
 
@@ -66,15 +67,20 @@ onBeforeMount(() => {
 
 async function updateData(lat: number, long: number): Promise<void> {
   loaded.value = false;
+  badRequest.value = false;
 
-  const [weatherData, geoData] = await Promise.all([
-    weatherService.getWeather(lat, long),
-    geoService.getLocation(lat, long),
-  ]);
+  try {
+    const [weatherData, geoData] = await Promise.all([
+      weatherService.getWeather(lat, long),
+      geoService.getLocation(lat, long),
+    ]);
 
-  weather.update(weatherData);
-  geo.update(geoData);
-  loaded.value = true;
+    weather.update(weatherData);
+    geo.update(geoData);
+    loaded.value = true;
+  } catch {
+    badRequest.value = true;
+  }
 }
 
 function toggleDetails(): void {
@@ -189,8 +195,12 @@ function queryCoord(): void {
     </main>
 
     <!-- Loading Screen -->
-    <div v-show="!loaded" class="loading-wrapper flex">
+    <div v-show="!loaded && !badRequest" class="loading-wrapper flex">
       <img src="/loading.png" class="loading-icon" />
+    </div>
+
+    <div class="bad-request-wrapper flex" v-show="badRequest">
+      <h1 class="fs-normal">Location not Found.</h1>
     </div>
     <!-- Details Modal -->
     <!-- <Transition name="slide">
@@ -212,6 +222,13 @@ main {
     --flow-margin: 2.5rem;
     grid-area: content;
   }
+}
+
+.bad-request-wrapper {
+  width: 100vw;
+  height: 100vh;
+  place-content: center;
+  place-items: center;
 }
 
 .info-container {
@@ -276,6 +293,8 @@ main {
   }
 }
 
+@media (min-width: 30rem) {
+}
 .dark-mode .query-container {
   background-color: #121212;
   select,
